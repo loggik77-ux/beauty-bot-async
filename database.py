@@ -11,8 +11,12 @@ DATABASE_URL = os.getenv("DATABASE_URL")
 if not DATABASE_URL:
     raise ValueError(
         "DATABASE_URL environment variable is not set. "
-        "Please create a .env file with DATABASE_URL=postgresql+asyncpg://user:password@host:port/database"
+        "Please create a .env file with DATABASE_URL=postgresql+psycopg://user:password@host:port/database"
     )
+
+# Railway предоставляет DATABASE_URL в формате postgresql://, нужно конвертировать в postgresql+psycopg://
+if DATABASE_URL.startswith("postgresql://") and "+psycopg" not in DATABASE_URL:
+    DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+psycopg://", 1)
 
 engine: AsyncEngine = create_async_engine(DATABASE_URL, echo=False, future=True)
 
