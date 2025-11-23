@@ -35,7 +35,7 @@ FastAPI приложение для управления записями в с�
 
 4. Создайте файл `.env` в корне проекта:
    ```env
-   DATABASE_URL=postgresql+psycopg://postgres:postgres@localhost:5432/beautybot
+   DATABASE_URL=postgresql+psycopg.async://postgres:postgres@localhost:5432/beautybot
    ```
 
 5. Создайте базу данных:

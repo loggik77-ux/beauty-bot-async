@@ -27,11 +27,14 @@ from dotenv import load_dotenv
 load_dotenv()
 database_url = os.getenv("DATABASE_URL")
 if database_url:
-    # Для Alembic нужен синхронный драйвер (psycopg2 или psycopg)
+    # Для Alembic нужен синхронный драйвер
     # Убираем async префиксы если есть
-    if database_url.startswith("postgresql+psycopg://"):
+    if database_url.startswith("postgresql+psycopg.async://"):
         # Для миграций используем синхронный psycopg (psycopg3 поддерживает синхронный режим)
-        database_url = database_url.replace("postgresql+psycopg://", "postgresql://", 1)
+        database_url = database_url.replace("postgresql+psycopg.async://", "postgresql+psycopg://", 1)
+    elif database_url.startswith("postgresql+psycopg://"):
+        # Оставляем как есть для синхронного режима
+        pass
     elif database_url.startswith("postgresql+asyncpg://"):
         database_url = database_url.replace("postgresql+asyncpg://", "postgresql://", 1)
     config.set_main_option("sqlalchemy.url", database_url)
